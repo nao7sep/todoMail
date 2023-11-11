@@ -21,7 +21,7 @@ namespace yyTodoMailSenderWpf
             WriteIndented = true
         };
 
-        private static Lazy <yyMailContactModel?> _sender = new (() =>
+        private static readonly Lazy <yyMailContactModel?> _sender = new (() =>
         {
             string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
 
@@ -43,7 +43,7 @@ namespace yyTodoMailSenderWpf
 
         public static yyMailContactModel? Sender => _sender.Value;
 
-        private static Lazy <string?> _senderString = new (() =>
+        private static readonly Lazy <string?> _senderString = new (() =>
         {
             if (Sender == null)
                 return null;
@@ -56,7 +56,7 @@ namespace yyTodoMailSenderWpf
 
         public static string? SenderString => _senderString.Value;
 
-        private static Lazy <yyMailContactModel?> _recipient = new (() =>
+        private static readonly Lazy <yyMailContactModel?> _recipient = new (() =>
         {
             string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
 
@@ -79,7 +79,7 @@ namespace yyTodoMailSenderWpf
 
         public static yyMailContactModel? Recipient => _recipient.Value;
 
-        private static Lazy <string?> _recipientString = new (() =>
+        private static readonly Lazy <string?> _recipientString = new (() =>
         {
             if (Recipient == null)
                 return null;
@@ -96,7 +96,7 @@ namespace yyTodoMailSenderWpf
 
         // Things related to translation:
 
-        private static Lazy <yyGptChatConnectionInfoModel?> _gptChatConnectionInfo = new (() =>
+        private static readonly Lazy <yyGptChatConnectionInfoModel?> _gptChatConnectionInfo = new (() =>
         {
             string xGptChatConnectionInfoFilePath = yyApplicationDirectory.MapPath ("GptChatConnection.json");
 
@@ -118,7 +118,7 @@ namespace yyTodoMailSenderWpf
 
         public static yyGptChatConnectionInfoModel? GptChatConnectionInfo => _gptChatConnectionInfo.Value;
 
-        private static Lazy <yyGptChatConversation> _conversation = new (() =>
+        private static readonly Lazy <yyGptChatConversation> _conversation = new (() =>
         {
             yyGptChatConversation xConversation = new (GptChatConnectionInfo!);
             xConversation.Request.Model = "gpt-4";
@@ -132,7 +132,7 @@ namespace yyTodoMailSenderWpf
 
         // Things related to mail sending:
 
-        private static Lazy <yyMailConnectionInfoModel?> _mailConnectionInfo = new (() =>
+        private static readonly Lazy <yyMailConnectionInfoModel?> _mailConnectionInfo = new (() =>
         {
             string xMailConnectionInfoFilePath = yyApplicationDirectory.MapPath ("MailConnection.json");
 

@@ -1,4 +1,4 @@
-﻿<Window x:Class="yyTodoMailSenderWpf.MainWindow"
+﻿<Window x:Name="WindowAlt" x:Class="yyTodoMailSenderWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,6 +30,6 @@
         <TextBox x:Name="TranslatedSubject" Grid.Column="1" Margin="5,41,10,0" VerticalAlignment="Top" Height="24" Padding="3,0" VerticalContentAlignment="Center" Background="#F0F0F0" IsTabStop="False" IsReadOnly="True"/>
         <TextBox x:Name="TranslatedBody" Grid.Column="1" Margin="5,70,10,39" Padding="8" FontSize="15" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Background="#F0F0F0" IsTabStop="False" IsReadOnly="True"/>
         <Button x:Name="SendTranslated" Grid.Column="1" Content="Send Translated" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Height="24" Padding="5,0" Click="SendTranslated_Click"/>
-        <Button x:Name="Close" Grid.Column="1" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="24" Padding="5,0" Click="Close_Click"/>
+        <Button x:Name="CloseAlt" Grid.Column="1" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="24" Padding="5,0" Click="Close_Click"/>
     </Grid>
 </Window>

@@ -1,4 +1,7 @@
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using yyGptLib;
 
 namespace yyTodoMailSenderWpf
 {
@@ -13,21 +16,17 @@ namespace yyTodoMailSenderWpf
         // In alphabetical order.
         // KISS.
 
-        private void DisableSubjectAndBody ()
-        {
-            Subject.IsEnabled = false;
-            Body.IsEnabled = false;
-        }
-
-        private void EnableSubjectAndBody ()
-        {
-            Subject.IsEnabled = true;
-            Body.IsEnabled = true;
-        }
-
         private bool IsEditing => string.IsNullOrWhiteSpace (Subject.Text) == false || string.IsNullOrWhiteSpace (Body.Text) == false;
 
         private void SetInitialFocus () => Subject.Focus ();
+
+        private void TranslateAlt (TextBox sourceControl, TextBox targetControl)
+        {
+            try
+            {
+                // Initialized to avoid compiler warning.
+                string xOriginalText = string.Empty;
+
                 // ChatGPT says:
 
                     // Dispatcher.Invoke in WPF synchronously executes code on the UI thread from a background thread.
@@ -35,6 +34,48 @@ namespace yyTodoMailSenderWpf
                     // This ensures that operations within Invoke are completed before the background thread proceeds.
                     // Use this method judiciously to prevent deadlocks and maintain application responsiveness.
                     // For non-blocking calls, consider using Dispatcher.BeginInvoke, which executes asynchronously.
+
+                // The reason why the compiler warns me about xOriginalText being used without initialization is unclear.
+                // Maybe the IDE cant (always) track operations on variables in other threads.
+
+                sourceControl.Dispatcher.Invoke (() => xOriginalText = sourceControl.Text);
+
+                if (string.IsNullOrWhiteSpace (xOriginalText))
+                    return;
+
+                App.Conversation.Request.Stream = true;
+                App.Conversation.Request.AddMessage (yyGptChatMessageRole.User, $"Please translate the following text into {App.Recipient!.PreferredLanguages! [0]} and return only the translated text:{Environment.NewLine}{Environment.NewLine}{xOriginalText}");
+                App.Conversation.SendAsync ().Wait ();
+
+                while (true)
+                {
+                    var xResult = App.Conversation.TryReadAndParseChunkAsync ().Result;
+
+                    if (xResult.IsSuccess)
+                    {
+                        if (xResult.PartialMessage == null)
+                            break; // End of stream or "data: [DONE]" is detected.
+
+                        targetControl.Dispatcher.Invoke (() => targetControl.Text += xResult.PartialMessage);
+                    }
+
+                    else
+                    {
+                        if (xResult.PartialMessage != null)
+                            MessageBox.Show (this, $"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        else MessageBox.Show (this, $"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        break;
+                    }
+                }
+            }
+
+            catch (Exception xException)
+            {
+                SimpleLogger.LogException (xException);
+            }
+        }
 
         private void UpdateIsEnabledOfSendAndTranslate ()
         {

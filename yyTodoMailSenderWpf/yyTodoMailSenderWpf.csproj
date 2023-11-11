@@ -28,10 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\yyTodoMailLib\yyTodoMailLib.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="yyGptLib">
         <HintPath>..\..\yyGpt\yyGptLib\bin\Release\net7.0\yyGptLib.dll</HintPath>
       </Reference>

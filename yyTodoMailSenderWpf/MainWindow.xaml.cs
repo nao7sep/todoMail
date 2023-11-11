@@ -28,7 +28,7 @@ namespace yyTodoMailSenderWpf
             }
         }
 
-        private void Subject_TextChanged (object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Subject_TextChanged (object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -41,11 +41,50 @@ namespace yyTodoMailSenderWpf
             }
         }
 
-        private void Body_TextChanged (object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Body_TextChanged (object sender, TextChangedEventArgs e)
         {
             try
             {
                 UpdateIsEnabledOfSendAndTranslate ();
+            }
+
+            catch (Exception xException)
+            {
+                SimpleLogger.LogException (xException);
+            }
+        }
+        private void Translate_Click (object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Task.Run (() =>
+                {
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.IsEnabled = false;
+                        Body.IsEnabled = false;
+
+                        Send.IsEnabled = false;
+                        Translate.IsEnabled = false;
+                        SendTranslated.IsEnabled = false;
+
+                        TranslatedSubject.Clear ();
+                        TranslatedBody.Clear ();
+                    });
+
+                    TranslateAlt (Subject, TranslatedSubject);
+                    TranslateAlt (Body, TranslatedBody);
+                    
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.IsEnabled = true;
+                        Body.IsEnabled = true;
+
+                        Send.IsEnabled = true;
+                        Translate.IsEnabled = true;
+                        SendTranslated.IsEnabled = true;
+                    });
+                });
             }
 
             catch (Exception xException)
