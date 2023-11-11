@@ -5,7 +5,7 @@ using yyLib;
 
 namespace yyTodoMailSenderWpf
 {
-    public static class SimpleLogger
+    public static class Logger
     {
         private static readonly Lazy <string> _logFilePath = new (() => yyApplicationDirectory.MapPath ("Logs.txt"));
 

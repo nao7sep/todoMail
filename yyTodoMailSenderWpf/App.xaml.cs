@@ -22,7 +22,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -37,7 +37,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -50,7 +50,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
     }

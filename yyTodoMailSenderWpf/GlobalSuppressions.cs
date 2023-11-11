@@ -3,5 +3,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+// Use conditional expression for assignment
+[assembly: SuppressMessage ("Style", "IDE0045")]
+
 // Use conditional expression for return
 [assembly: SuppressMessage ("Style", "IDE0046")]

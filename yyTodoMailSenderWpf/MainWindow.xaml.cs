@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +25,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -38,7 +38,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -51,7 +51,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -72,12 +72,15 @@ namespace yyTodoMailSenderWpf
                         SendTranslated.IsEnabled = false;
                     });
 
-                    SendMessage (Subject, Body);
+                    bool xIsSuccess = SendMessage (Subject, Body);
 
                     WindowAlt.Dispatcher.Invoke (() =>
                     {
-                        Subject.Clear ();
-                        Body.Clear ();
+                        if (xIsSuccess)
+                        {
+                            Subject.Clear ();
+                            Body.Clear ();
+                        }
 
                         Subject.IsEnabled = true;
                         Body.IsEnabled = true;
@@ -85,8 +88,11 @@ namespace yyTodoMailSenderWpf
                         Send.IsEnabled = true;
                         Translate.IsEnabled = true;
 
-                        TranslatedSubject.Clear ();
-                        TranslatedBody.Clear ();
+                        if (xIsSuccess)
+                        {
+                            TranslatedSubject.Clear ();
+                            TranslatedBody.Clear ();
+                        }
 
                         // Stays down.
                         // SendTranslated.IsEnabled = true;
@@ -98,7 +104,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -122,8 +128,8 @@ namespace yyTodoMailSenderWpf
                         SendTranslated.IsEnabled = false;
                     });
 
-                    TranslateAlt (Subject, TranslatedSubject);
-                    TranslateAlt (Body, TranslatedBody);
+                    // Only if the first time is successful, the second one is executed:
+                    bool xIsSuccess = TranslateAlt (Subject, TranslatedSubject) && TranslateAlt (Body, TranslatedBody);
 
                     // If the button could be pressed, at least one thing was translated.
 
@@ -135,15 +141,24 @@ namespace yyTodoMailSenderWpf
                         Send.IsEnabled = true;
                         Translate.IsEnabled = true;
 
-                        SendTranslated.IsEnabled = true;
-                        SendTranslated.Focus ();
+                        if (xIsSuccess)
+                        {
+                            SendTranslated.IsEnabled = true;
+                            SendTranslated.Focus ();
+                        }
+
+                        else
+                        {
+                            // SendTranslated stays down.
+                            CloseAlt.Focus ();
+                        }
                     });
                 });
             }
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -164,12 +179,15 @@ namespace yyTodoMailSenderWpf
                         SendTranslated.IsEnabled = false;
                     });
 
-                    SendMessage (TranslatedSubject, TranslatedBody);
+                    bool xIsSuccess = SendMessage (TranslatedSubject, TranslatedBody);
 
                     WindowAlt.Dispatcher.Invoke (() =>
                     {
-                        Subject.Clear ();
-                        Body.Clear ();
+                        if (xIsSuccess)
+                        {
+                            Subject.Clear ();
+                            Body.Clear ();
+                        }
 
                         Subject.IsEnabled = true;
                         Body.IsEnabled = true;
@@ -177,8 +195,11 @@ namespace yyTodoMailSenderWpf
                         Send.IsEnabled = true;
                         Translate.IsEnabled = true;
 
-                        TranslatedSubject.Clear ();
-                        TranslatedBody.Clear ();
+                        if (xIsSuccess)
+                        {
+                            TranslatedSubject.Clear ();
+                            TranslatedBody.Clear ();
+                        }
 
                         // Stays down.
                         // SendTranslated.IsEnabled = true;
@@ -190,7 +211,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -203,7 +224,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
 
@@ -222,7 +243,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
             }
         }
     }

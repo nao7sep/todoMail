@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +23,7 @@ namespace yyTodoMailSenderWpf
 
         private bool IsEditing => string.IsNullOrWhiteSpace (Subject.Text) == false || string.IsNullOrWhiteSpace (Body.Text) == false;
 
-        private void SendMessage (TextBox subjectControl, TextBox bodyControl)
+        private bool SendMessage (TextBox subjectControl, TextBox bodyControl)
         {
             try
             {
@@ -31,34 +33,56 @@ namespace yyTodoMailSenderWpf
 
                 WindowAlt.Dispatcher.Invoke (() =>
                 {
-                    xSubject = subjectControl.Text;
-                    xBody = bodyControl.Text;
+                    xSubject = subjectControl.Text.Trim ();
+                    xBody = TrimForBody (bodyControl.Text);
+
+                    // Added code.
+                    // Should be more useful now.
+
+                    if (subjectControl == TranslatedSubject)
+                    {
+                        string xBorderline = new ('-', 4);
+
+                        if (string.IsNullOrWhiteSpace (Subject.Text) == false)
+                            xBody += $"{Environment.NewLine}{xBorderline}{Environment.NewLine}{Subject.Text.Trim ()}";  
+
+                        if (string.IsNullOrWhiteSpace (Body.Text) == false)
+                            xBody += $"{Environment.NewLine}{xBorderline}{Environment.NewLine}{TrimForBody (Body.Text)}";
+                    }
                 });
 
                 // Everything bad that occurs during the sending should be logged.
 
-                using MimeMessage xMessageForRecipient = new MimeMessage ();
-                xMessageForRecipient.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
-                xMessageForRecipient.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
-                xMessageForRecipient.Subject = xSubject;
-                xMessageForRecipient.Body = new TextPart ("plain") { Text = xBody };
+                using MimeMessage xMessage = new ();
+                xMessage.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
+                xMessage.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
+                xMessage.Subject = $"[TODO] {xSubject}";
+                xMessage.Body = new TextPart ("plain") { Text = xBody };
 
-                using SmtpClient xClient = new SmtpClient ();
+                using SmtpClient xClient = new ();
                 xClient.ConnectAsync (App.MailConnectionInfo!).Wait ();
                 xClient.AuthenticateAsync (App.MailConnectionInfo!).Wait ();
+                xClient.SendAsync (xMessage).Wait ();
 
-                xClient.SendAsync (xMessageForRecipient).Wait ();
+                MailStorage.Store (xMessage);
+
+                return true;
             }
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
+                MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Caught exceptions, even if they are re-thrown, will not affect the upper Task.
+                // Errors in this class must be reported to the user by this class.
+
+                return false;
             }
         }
 
         private void SetInitialFocus () => Subject.Focus ();
 
-        private void TranslateAlt (TextBox sourceControl, TextBox targetControl)
+        private static bool TranslateAlt (TextBox sourceControl, TextBox targetControl)
         {
             try
             {
@@ -68,7 +92,7 @@ namespace yyTodoMailSenderWpf
                 sourceControl.Dispatcher.Invoke (() => xOriginalText = sourceControl.Text);
 
                 if (string.IsNullOrWhiteSpace (xOriginalText))
-                    return;
+                    return true; // Not an error.
 
                 App.Conversation.Request.Stream = true;
                 App.Conversation.Request.AddMessage (yyGptChatMessageRole.User, $"Please translate the following text into {App.Recipient!.PreferredLanguages! [0]} and return only the translated text:{Environment.NewLine}{Environment.NewLine}{xOriginalText}");
@@ -93,25 +117,48 @@ namespace yyTodoMailSenderWpf
 
                         if (xResult.PartialMessage != null)
                         {
-                            SimpleLogger.Log ("Translation Error", xResult.PartialMessage);
-                            MessageBox.Show (this, $"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Logger.Log ("Translation Error", xResult.PartialMessage);
+                            MessageBox.Show ($"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // Cant access 'owner' here.
                         }
 
                         else
                         {
-                            SimpleLogger.Log ("Translation Exception", xResult.Exception!.ToString ());
-                            MessageBox.Show (this, $"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Logger.Log ("Translation Exception", xResult.Exception!.ToString ());
+                            MessageBox.Show ($"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
 
-                        break;
+                        return false;
                     }
                 }
+
+                return true;
             }
 
             catch (Exception xException)
             {
-                SimpleLogger.LogException (xException);
+                Logger.LogException (xException);
+                MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
+        }
+
+        private static string TrimForBody (string body)
+        {
+            // There are a thousand ways to improve this implementation.
+            // Like looking for line breaks by myself and constructing a StringBuilder instance using Spans. 
+            // One day, yyLib will have a series of fast string manipulation methods (hopefully).
+
+            if (string.IsNullOrEmpty (body))
+                return body;
+
+            using StringReader xReader = new (body);
+            List <string> xLines = new ();
+            string? xLine;
+
+            while ((xLine = xReader.ReadLine ()) != null)
+                xLines.Add (xLine.TrimEnd ());
+
+            return string.Join (Environment.NewLine, xLines).TrimStart ('\r', '\n').TrimEnd ();
         }
 
         private void UpdateIsEnabledOfSendAndTranslate ()
