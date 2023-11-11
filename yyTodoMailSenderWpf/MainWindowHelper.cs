@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 
 namespace yyTodoMailSenderWpf
 {
@@ -28,6 +28,13 @@ namespace yyTodoMailSenderWpf
         private bool IsEditing => string.IsNullOrWhiteSpace (Subject.Text) == false || string.IsNullOrWhiteSpace (Body.Text) == false;
 
         private void SetInitialFocus () => Subject.Focus ();
+                // ChatGPT says:
+
+                    // Dispatcher.Invoke in WPF synchronously executes code on the UI thread from a background thread.
+                    // It blocks the calling thread until the UI thread has processed and completed the code within the delegate.
+                    // This ensures that operations within Invoke are completed before the background thread proceeds.
+                    // Use this method judiciously to prevent deadlocks and maintain application responsiveness.
+                    // For non-blocking calls, consider using Dispatcher.BeginInvoke, which executes asynchronously.
 
         private void UpdateIsEnabledOfSendAndTranslate ()
         {

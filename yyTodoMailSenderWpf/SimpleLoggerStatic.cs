@@ -7,7 +7,7 @@ namespace yyTodoMailSenderWpf
 {
     public static class SimpleLogger
     {
-        private static Lazy <string> _logFilePath = new Lazy <string> (() => yyApplicationDirectory.MapPath ("Logs.txt"));
+        private static Lazy <string> _logFilePath = new (() => yyApplicationDirectory.MapPath ("Logs.txt"));
 
         public static string LogFilePath => _logFilePath.Value;
 

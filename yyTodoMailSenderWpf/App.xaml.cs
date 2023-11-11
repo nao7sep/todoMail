@@ -26,11 +26,7 @@ namespace yyTodoMailSenderWpf
             }
         }
 
-        private static void Cleanup ()
-        {
-            // May be unnecessary, but harmless.
-            Conversation.Dispose ();
-        }
+        private static void Cleanup () => Conversation.Dispose (); // May be unnecessary, but harmless.
 
         private void Application_Exit (object sender, ExitEventArgs e) // App closing.
         {
