@@ -140,6 +140,14 @@ namespace yyTodoMailSenderWpf
                 MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+
+            finally
+            {
+                // Keeping the head empty.
+
+                while (App.Conversation.Request.Messages!.Count > 1)
+                    App.Conversation.Request.RemoveLastMessage ();
+            }
         }
 
         private static string TrimForBody (string body)
