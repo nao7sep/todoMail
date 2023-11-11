@@ -11,7 +11,7 @@ namespace yyTodoMailSenderWpf
 
         public static string LogFilePath => _logFilePath.Value;
 
-        private static string Borderline => new ('-', 80);
+        private static string Borderline => new ('-', 4);
 
         public static void Log (string key, string value)
         {

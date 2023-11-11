@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +19,7 @@ namespace yyTodoMailSenderWpf
             {
                 UpdateTextOfSenderAndRecipient ();
                 UpdateIsEnabledOfSendAndTranslate ();
+                UpdateIsEnabledOfSendTranslated ();
                 SetInitialFocus ();
             }
 
@@ -53,6 +54,52 @@ namespace yyTodoMailSenderWpf
                 SimpleLogger.LogException (xException);
             }
         }
+
+        private void Send_Click (object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Task.Run (() =>
+                {
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.IsEnabled = false;
+                        Body.IsEnabled = false;
+
+                        Send.IsEnabled = false;
+                        Translate.IsEnabled = false;
+
+                        SendTranslated.IsEnabled = false;
+                    });
+
+                    SendMessage (Subject, Body);
+
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.Clear ();
+                        Body.Clear ();
+
+                        Subject.IsEnabled = true;
+                        Body.IsEnabled = true;
+
+                        Send.IsEnabled = true;
+                        Translate.IsEnabled = true;
+
+                        TranslatedSubject.Clear ();
+                        TranslatedBody.Clear ();
+
+                        // Stays down.
+                        // SendTranslated.IsEnabled = true;
+                    });
+                });
+            }
+
+            catch (Exception xException)
+            {
+                SimpleLogger.LogException (xException);
+            }
+        }
+
         private void Translate_Click (object sender, RoutedEventArgs e)
         {
             try
@@ -66,15 +113,18 @@ namespace yyTodoMailSenderWpf
 
                         Send.IsEnabled = false;
                         Translate.IsEnabled = false;
-                        SendTranslated.IsEnabled = false;
 
                         TranslatedSubject.Clear ();
                         TranslatedBody.Clear ();
+
+                        SendTranslated.IsEnabled = false;
                     });
 
                     TranslateAlt (Subject, TranslatedSubject);
                     TranslateAlt (Body, TranslatedBody);
-                    
+
+                    // If the button could be pressed, at least one thing was translated.
+
                     WindowAlt.Dispatcher.Invoke (() =>
                     {
                         Subject.IsEnabled = true;
@@ -82,6 +132,7 @@ namespace yyTodoMailSenderWpf
 
                         Send.IsEnabled = true;
                         Translate.IsEnabled = true;
+
                         SendTranslated.IsEnabled = true;
                     });
                 });
@@ -92,6 +143,52 @@ namespace yyTodoMailSenderWpf
                 SimpleLogger.LogException (xException);
             }
         }
+
+        private void SendTranslated_Click (object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Task.Run (() =>
+                {
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.IsEnabled = false;
+                        Body.IsEnabled = false;
+
+                        Send.IsEnabled = false;
+                        Translate.IsEnabled = false;
+
+                        SendTranslated.IsEnabled = false;
+                    });
+
+                    SendMessage (TranslatedSubject, TranslatedBody);
+
+                    WindowAlt.Dispatcher.Invoke (() =>
+                    {
+                        Subject.Clear ();
+                        Body.Clear ();
+
+                        Subject.IsEnabled = true;
+                        Body.IsEnabled = true;
+
+                        Send.IsEnabled = true;
+                        Translate.IsEnabled = true;
+
+                        TranslatedSubject.Clear ();
+                        TranslatedBody.Clear ();
+
+                        // Stays down.
+                        // SendTranslated.IsEnabled = true;
+                    });
+                });
+            }
+
+            catch (Exception xException)
+            {
+                SimpleLogger.LogException (xException);
+            }
+        }
+
         private void Close_Click (object sender, RoutedEventArgs e)
         {
             try

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using MailKit.Net.Smtp;
+using MimeKit;
 using yyGptLib;
+using yyMailLib;
 
 namespace yyTodoMailSenderWpf
 {
@@ -13,10 +17,42 @@ namespace yyTodoMailSenderWpf
         // Sometimes, even code that is suggested by IntelliSense and updates the window preview is rejected by the compiler and there's really nothing I can do about it.
         // For WPF, I will stick to the good old event-driven programming.
 
-        // In alphabetical order.
-        // KISS.
+        // In alphabetical order:
 
         private bool IsEditing => string.IsNullOrWhiteSpace (Subject.Text) == false || string.IsNullOrWhiteSpace (Body.Text) == false;
+
+        private void SendMessage (TextBox subjectControl, TextBox bodyControl)
+        {
+            try
+            {
+                // Initialized to avoid compiler warning.
+                string xSubject = string.Empty,
+                    xBody = string.Empty;
+
+                WindowAlt.Dispatcher.Invoke (() =>
+                {
+                    xSubject = subjectControl.Text;
+                    xBody = bodyControl.Text;
+                });
+
+                using MimeMessage xMessageForRecipient = new MimeMessage ();
+                xMessageForRecipient.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
+                xMessageForRecipient.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
+                xMessageForRecipient.Subject = xSubject;
+                xMessageForRecipient.Body = new TextPart ("plain") { Text = xBody };
+
+                using SmtpClient xClient = new SmtpClient ();
+                xClient.ConnectAsync (App.MailConnectionInfo!).Wait ();
+                xClient.AuthenticateAsync (App.MailConnectionInfo!).Wait ();
+
+                xClient.SendAsync (xMessageForRecipient).Wait ();
+            }
+
+            catch (Exception xException)
+            {
+                SimpleLogger.LogException (xException);
+            }
+        }
 
         private void SetInitialFocus () => Subject.Focus ();
 
@@ -26,17 +62,6 @@ namespace yyTodoMailSenderWpf
             {
                 // Initialized to avoid compiler warning.
                 string xOriginalText = string.Empty;
-
-                // ChatGPT says:
-
-                    // Dispatcher.Invoke in WPF synchronously executes code on the UI thread from a background thread.
-                    // It blocks the calling thread until the UI thread has processed and completed the code within the delegate.
-                    // This ensures that operations within Invoke are completed before the background thread proceeds.
-                    // Use this method judiciously to prevent deadlocks and maintain application responsiveness.
-                    // For non-blocking calls, consider using Dispatcher.BeginInvoke, which executes asynchronously.
-
-                // The reason why the compiler warns me about xOriginalText being used without initialization is unclear.
-                // Maybe the IDE cant (always) track operations on variables in other threads.
 
                 sourceControl.Dispatcher.Invoke (() => xOriginalText = sourceControl.Text);
 
@@ -90,6 +115,14 @@ namespace yyTodoMailSenderWpf
                 Send.IsEnabled = true;
                 Translate.IsEnabled = true;
             }
+        }
+
+        private void UpdateIsEnabledOfSendTranslated ()
+        {
+            if (string.IsNullOrWhiteSpace (TranslatedSubject.Text) && string.IsNullOrWhiteSpace (TranslatedBody.Text))
+                SendTranslated.IsEnabled = false;
+
+            else SendTranslated.IsEnabled = true;
         }
 
         private void UpdateTextOfSenderAndRecipient ()
