@@ -35,6 +35,8 @@ namespace yyTodoMailSenderWpf
                     xBody = bodyControl.Text;
                 });
 
+                // Everything bad that occurs during the sending should be logged.
+
                 using MimeMessage xMessageForRecipient = new MimeMessage ();
                 xMessageForRecipient.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
                 xMessageForRecipient.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
@@ -86,10 +88,20 @@ namespace yyTodoMailSenderWpf
 
                     else
                     {
-                        if (xResult.PartialMessage != null)
-                            MessageBox.Show (this, $"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        // Logging what can be.
+                        // "Translation Exception" isnt really a user friendly term, but it should be OK.
 
-                        else MessageBox.Show (this, $"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (xResult.PartialMessage != null)
+                        {
+                            SimpleLogger.Log ("Translation Error", xResult.PartialMessage);
+                            MessageBox.Show (this, $"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+
+                        else
+                        {
+                            SimpleLogger.Log ("Translation Exception", xResult.Exception!.ToString ());
+                            MessageBox.Show (this, $"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
 
                         break;
                     }

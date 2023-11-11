@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,6 +90,8 @@ namespace yyTodoMailSenderWpf
 
                         // Stays down.
                         // SendTranslated.IsEnabled = true;
+
+                        Subject.Focus ();
                     });
                 });
             }
@@ -134,6 +136,7 @@ namespace yyTodoMailSenderWpf
                         Translate.IsEnabled = true;
 
                         SendTranslated.IsEnabled = true;
+                        SendTranslated.Focus ();
                     });
                 });
             }
@@ -179,6 +182,8 @@ namespace yyTodoMailSenderWpf
 
                         // Stays down.
                         // SendTranslated.IsEnabled = true;
+
+                        Subject.Focus ();
                     });
                 });
             }
