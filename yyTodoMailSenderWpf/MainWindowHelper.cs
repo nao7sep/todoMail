@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using MailKit.Net.Smtp;
@@ -28,13 +29,13 @@ namespace yyTodoMailSenderWpf
             try
             {
                 // Initialized to avoid compiler warning.
-                string xSubject = string.Empty,
-                    xBody = string.Empty;
+                string xSubject = string.Empty;
+                StringBuilder xBody = new ();
 
                 WindowAlt.Dispatcher.Invoke (() =>
                 {
                     xSubject = subjectControl.Text.Trim ();
-                    xBody = TrimForBody (bodyControl.Text);
+                    xBody.Append (yyString.TrimWhiteSpaceLines (bodyControl.Text));
 
                     // Added code.
                     // Should be more useful now.
@@ -44,10 +45,26 @@ namespace yyTodoMailSenderWpf
                         string xBorderline = new ('-', 4);
 
                         if (string.IsNullOrWhiteSpace (Subject.Text) == false)
-                            xBody += $"{Environment.NewLine}{xBorderline}{Environment.NewLine}{Subject.Text.Trim ()}";  
+                        {
+                            if (xBody.Length > 0)
+                            {
+                                xBody.AppendLine ();
+                                xBody.AppendLine (xBorderline);
+                            }
+
+                            xBody.Append (Subject.Text.Trim ());
+                        }
 
                         if (string.IsNullOrWhiteSpace (Body.Text) == false)
-                            xBody += $"{Environment.NewLine}{xBorderline}{Environment.NewLine}{TrimForBody (Body.Text)}";
+                        {
+                            if (xBody.Length > 0)
+                            {
+                                xBody.AppendLine ();
+                                xBody.AppendLine (xBorderline);
+                            }
+
+                            xBody.Append (yyString.TrimWhiteSpaceLines (Body.Text));
+                        }
                     }
                 });
 
@@ -57,7 +74,7 @@ namespace yyTodoMailSenderWpf
                 xMessage.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
                 xMessage.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
                 xMessage.Subject = $"[TODO] {xSubject}";
-                xMessage.Body = new TextPart ("plain") { Text = xBody };
+                xMessage.Body = new TextPart ("plain") { Text = xBody.ToString () };
 
                 using SmtpClient xClient = new ();
                 xClient.ConnectAsync (App.MailConnectionInfo!).Wait ();
@@ -148,25 +165,6 @@ namespace yyTodoMailSenderWpf
                 while (App.Conversation.Request.Messages!.Count > 1)
                     App.Conversation.Request.RemoveLastMessage ();
             }
-        }
-
-        private static string TrimForBody (string body)
-        {
-            // There are a thousand ways to improve this implementation.
-            // Like looking for line breaks by myself and constructing a StringBuilder instance using Spans. 
-            // One day, yyLib will have a series of fast string manipulation methods (hopefully).
-
-            if (string.IsNullOrEmpty (body))
-                return body;
-
-            using StringReader xReader = new (body);
-            List <string> xLines = [];
-            string? xLine;
-
-            while ((xLine = xReader.ReadLine ()) != null)
-                xLines.Add (xLine.TrimEnd ());
-
-            return string.Join (Environment.NewLine, xLines).TrimStart ('\r', '\n').TrimEnd ();
         }
 
         private void UpdateIsEnabledOfSendAndTranslate ()

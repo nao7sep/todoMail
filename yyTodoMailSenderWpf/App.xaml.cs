@@ -153,7 +153,15 @@ namespace yyTodoMailSenderWpf
         {
             try
             {
-                if (Sender == null || Recipient == null || GptChatConnectionInfo == null || MailConnectionInfo == null)
+                // If we directly check Sender and the others, the program will exit for each newly generated file,
+                // forcing us to restart it a few times until the configuration files are all generated.
+
+                var xSender = Sender;
+                var xRecipient = Recipient;
+                var xGptChatConnectionInfo = GptChatConnectionInfo;
+                var xMailConnectionInfo = MailConnectionInfo;
+
+                if (xSender == null || xRecipient == null || xGptChatConnectionInfo == null || xMailConnectionInfo == null)
                 {
                     MessageBox.Show ("Please check the JSON configuration files located in the same directory as this application.", "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Shutdown ();
