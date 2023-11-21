@@ -132,10 +132,13 @@ namespace yyTodoMailSenderWpf
                         // Logging what can be.
                         // "Translation Exception" isnt really a user friendly term, but it should be OK.
 
+                        if (xResult.RawContent != null)
+                            yySimpleLogger.Default.TryWrite ("Translation RawContent", xResult.RawContent.GetVisibleString ());
+
                         if (xResult.PartialMessage != null)
                         {
-                            yySimpleLogger.Default.TryWrite ("Translation Error", xResult.PartialMessage);
-                            MessageBox.Show ($"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // Cant access 'owner' here.
+                            yySimpleLogger.Default.TryWrite ("Translation Error", xResult.PartialMessage.GetVisibleString ());
+                            MessageBox.Show ($"Error: {xResult.PartialMessage.GetVisibleString ()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // Cant access 'owner' here.
                         }
 
                         else
