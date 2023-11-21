@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using yyGptLib;
+using yyLib;
 
 namespace yyTodoMailSenderWpf
 {
@@ -25,7 +25,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -38,7 +38,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -51,7 +51,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -104,7 +104,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -158,7 +158,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -211,7 +211,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -224,7 +224,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
 
@@ -243,7 +243,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
             }
         }
     }

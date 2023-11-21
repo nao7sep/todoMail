@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using MailKit.Net.Smtp;
 using MimeKit;
 using yyGptLib;
+using yyLib;
 using yyMailLib;
 
 namespace yyTodoMailSenderWpf
@@ -71,7 +71,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
                 MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 // Caught exceptions, even if they are re-thrown, will not affect the upper Task.
                 // Errors in this class must be reported to the user by this class.
@@ -117,13 +117,13 @@ namespace yyTodoMailSenderWpf
 
                         if (xResult.PartialMessage != null)
                         {
-                            Logger.Log ("Translation Error", xResult.PartialMessage);
+                            yySimpleLogger.Default.TryWrite ("Translation Error", xResult.PartialMessage);
                             MessageBox.Show ($"Error: {xResult.PartialMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error); // Cant access 'owner' here.
                         }
 
                         else
                         {
-                            Logger.Log ("Translation Exception", xResult.Exception!.ToString ());
+                            yySimpleLogger.Default.TryWrite ("Translation Exception", xResult.Exception!.ToString ());
                             MessageBox.Show ($"Exception: {xResult.Exception}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
 
@@ -136,7 +136,7 @@ namespace yyTodoMailSenderWpf
 
             catch (Exception xException)
             {
-                Logger.LogException (xException);
+                yySimpleLogger.Default.TryWriteException (xException);
                 MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
@@ -160,7 +160,7 @@ namespace yyTodoMailSenderWpf
                 return body;
 
             using StringReader xReader = new (body);
-            List <string> xLines = new ();
+            List <string> xLines = [];
             string? xLine;
 
             while ((xLine = xReader.ReadLine ()) != null)

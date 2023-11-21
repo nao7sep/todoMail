@@ -17,7 +17,7 @@ namespace yyTodoMailSenderWpf
             if (Directory.Exists (MailStorageDirectoryPath) == false)
                 Directory.CreateDirectory (MailStorageDirectoryPath);
 
-            string xFilePath = Path.Join (MailStorageDirectoryPath, message.Date.ToUniversalTime ().ToString ("yyyyMMdd'T'HHmmss'Z.eml'", CultureInfo.InvariantCulture));
+            string xFilePath = Path.Join (MailStorageDirectoryPath, message.Date.ToUniversalTime ().ToString ("'Message-'yyyyMMdd'T'HHmmss'Z.eml'", CultureInfo.InvariantCulture));
             message.WriteTo (xFilePath);
         }
     }
