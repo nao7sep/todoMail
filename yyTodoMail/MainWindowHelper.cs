@@ -10,7 +10,7 @@ using yyGptLib;
 using yyLib;
 using yyMailLib;
 
-namespace yyTodoMailSenderWpf
+namespace yyTodoMail
 {
     public partial class MainWindow: Window
     {

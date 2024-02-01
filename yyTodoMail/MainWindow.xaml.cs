@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using yyLib;
 
-namespace yyTodoMailSenderWpf
+namespace yyTodoMail
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

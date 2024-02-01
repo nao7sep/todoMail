@@ -7,7 +7,7 @@ using yyGptLib;
 using yyLib;
 using yyMailLib;
 
-namespace yyTodoMailSenderWpf
+namespace yyTodoMail
 {
     /// <summary>
     /// Interaction logic for App.xaml
