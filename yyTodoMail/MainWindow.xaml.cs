@@ -17,6 +17,7 @@ namespace yyTodoMail
         {
             try
             {
+                InitializeWindow ();
                 UpdateTextOfSenderAndRecipient ();
                 UpdateIsEnabledOfSendAndTranslate ();
                 UpdateIsEnabledOfSendTranslated ();
@@ -26,6 +27,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -39,6 +41,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -52,6 +55,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -105,6 +109,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -159,6 +164,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -212,6 +218,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -225,6 +232,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
 
@@ -244,6 +252,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (this, xException);
             }
         }
     }

@@ -114,7 +114,7 @@ namespace yyTodoMail
         private static readonly Lazy <yyGptChatConversation> _conversation = new (() =>
         {
             yyGptChatConversation xConversation = new (GptChatConnectionInfo!);
-            xConversation.Request.Model = "gpt-4";
+            xConversation.Request.Model = Shared.AppSpecificConfig ["OpenAiChatModel"].WhiteSpaceToNull () ?? "gpt-4";
             xConversation.Request.AddMessage (yyGptChatMessageRole.System, "You are a helpful assistant.");
             return xConversation;
         });
@@ -172,6 +172,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (null, xException);
             }
         }
 
@@ -187,6 +188,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (null, xException);
             }
         }
 
@@ -200,6 +202,7 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
+                Shared.ShowExceptionMessageBox (null, xException);
             }
         }
     }

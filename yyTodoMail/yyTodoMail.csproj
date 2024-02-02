@@ -24,6 +24,8 @@
 
     <ItemGroup>
       <PackageReference Include="MailKit" Version="4.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
       <PackageReference Include="MimeKit" Version="4.2.0" />
     </ItemGroup>
 
@@ -37,6 +39,12 @@
       <Reference Include="yyMailLib">
         <HintPath>..\..\yyMail\yyMailLib\bin\Release\net8.0\yyMailLib.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

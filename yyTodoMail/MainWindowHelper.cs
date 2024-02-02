@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,9 +87,10 @@ namespace yyTodoMail
             catch (Exception xException)
             {
                 yySimpleLogger.Default.TryWriteException (xException);
-                MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 // Caught exceptions, even if they are re-thrown, will not affect the upper Task.
                 // Errors in this class must be reported to the user by this class.
+                MessageBox.Show ($"Exception: {xException}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 return false;
             }
@@ -197,6 +196,23 @@ namespace yyTodoMail
         {
             Sender.Text = App.SenderString;
             Recipient.Text = App.RecipientString;
+        }
+
+        private void InitializeWindow ()
+        {
+            if (bool.TryParse (Shared.AppSpecificConfig ["IsWindowMaximized"], out bool xIsMaximized) && xIsMaximized)
+                WindowState = WindowState.Maximized;
+
+            string? xFontFamily = Shared.AppSpecificConfig ["FontFamily"];
+
+            if (string.IsNullOrWhiteSpace (xFontFamily) == false)
+                FontFamily = new (xFontFamily);
+
+            if (double.TryParse (Shared.AppSpecificConfig ["ContentFontSize"], out double xContentFontSize))
+            {
+                Body.FontSize = xContentFontSize;
+                TranslatedBody.FontSize = xContentFontSize;
+            }
         }
     }
 }
