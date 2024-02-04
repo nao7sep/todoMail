@@ -15,7 +15,7 @@ namespace yyTodoMail
         // IConfiguration.GetSection(String) Method (Microsoft.Extensions.Configuration) | Microsoft Learn
         // https://learn.microsoft.com/ja-jp/dotnet/api/microsoft.extensions.configuration.iconfiguration.getsection
 
-        private static Lazy <IConfigurationSection> _appSpecificConfig = new (() => yyAppSettings.Config.GetSection ("AppSpecific"));
+        private static readonly Lazy <IConfigurationSection> _appSpecificConfig = new (() => yyAppSettings.Config.GetSection ("AppSpecific"));
 
         public static IConfigurationSection AppSpecificConfig => _appSpecificConfig.Value;
     }
