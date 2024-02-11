@@ -33,7 +33,7 @@ namespace yyTodoMail
                 WindowAlt.Dispatcher.Invoke (() =>
                 {
                     xSubject = subjectControl.Text.Trim ();
-                    xBody.Append (yyString.TrimWhiteSpaceLines (bodyControl.Text));
+                    xBody.Append (yyString.TrimLines (bodyControl.Text));
 
                     // Added code.
                     // Should be more useful now.
@@ -61,7 +61,7 @@ namespace yyTodoMail
                                 xBody.AppendLine (xBorderline);
                             }
 
-                            xBody.Append (yyString.TrimWhiteSpaceLines (Body.Text));
+                            xBody.Append (yyString.TrimLines (Body.Text));
                         }
                     }
                 });
@@ -69,14 +69,14 @@ namespace yyTodoMail
                 // Everything bad that occurs during the sending should be logged.
 
                 using MimeMessage xMessage = new ();
-                xMessage.From.Add (new MailboxAddress (App.Sender!.Name, App.Sender!.Address));
-                xMessage.To.Add (new MailboxAddress (App.Recipient!.Name, App.Recipient!.Address));
+                xMessage.From.Add (new MailboxAddress (Session.Sender!.Name, Session.Sender!.Address));
+                xMessage.To.Add (new MailboxAddress (Session.Recipient!.Name, Session.Recipient!.Address));
                 xMessage.Subject = $"[TODO] {xSubject}";
                 xMessage.Body = new TextPart ("plain") { Text = xBody.ToString () };
 
                 using SmtpClient xClient = new ();
-                xClient.ConnectAsync (App.MailConnectionInfo!).Wait ();
-                xClient.AuthenticateAsync (App.MailConnectionInfo!).Wait ();
+                xClient.ConnectAsync (Session.MailConnectionInfo!).Wait ();
+                xClient.AuthenticateAsync (Session.MailConnectionInfo!).Wait ();
                 xClient.SendAsync (xMessage).Wait ();
 
                 MailStorage.Store (xMessage);
@@ -110,13 +110,13 @@ namespace yyTodoMail
                 if (string.IsNullOrWhiteSpace (xOriginalText))
                     return true; // Not an error.
 
-                App.Conversation.Request.Stream = true;
-                App.Conversation.Request.AddMessage (yyGptChatMessageRole.User, $"Please translate the following text into {App.Recipient!.PreferredLanguages! [0]} and return only the translated text:{Environment.NewLine}{Environment.NewLine}{xOriginalText}");
-                App.Conversation.SendAsync ().Wait ();
+                Session.Conversation.Request.Stream = true;
+                Session.Conversation.Request.AddMessage (yyGptChatMessageRole.User, $"Please translate the following text into {Session.Recipient!.PreferredLanguages! [0]} and return only the translated text:{Environment.NewLine}{Environment.NewLine}{xOriginalText}");
+                Session.Conversation.SendAsync ().Wait ();
 
                 while (true)
                 {
-                    var xResult = App.Conversation.TryReadAndParseChunkAsync ().Result;
+                    var xResult = Session.Conversation.TryReadAndParseChunkAsync ().Result;
 
                     if (xResult.IsSuccess)
                     {
@@ -164,8 +164,8 @@ namespace yyTodoMail
             {
                 // Keeping the head empty.
 
-                while (App.Conversation.Request.Messages!.Count > 1)
-                    App.Conversation.Request.RemoveLastMessage ();
+                while (Session.Conversation.Request.Messages!.Count > 1)
+                    Session.Conversation.Request.RemoveLastMessage ();
             }
         }
 
@@ -194,12 +194,17 @@ namespace yyTodoMail
 
         private void UpdateTextOfSenderAndRecipient ()
         {
-            Sender.Text = App.SenderString;
-            Recipient.Text = App.RecipientString;
+            Sender.Text = Session.SenderString;
+            Recipient.Text = Session.RecipientString;
         }
 
         private void InitializeWindow ()
         {
+            string? xTitle = Shared.AppSpecificConfig ["Title"];
+
+            if (string.IsNullOrWhiteSpace (xTitle) == false)
+                Title = xTitle;
+
             if (bool.TryParse (Shared.AppSpecificConfig ["IsWindowMaximized"], out bool xIsMaximized) && xIsMaximized)
                 WindowState = WindowState.Maximized;
 
