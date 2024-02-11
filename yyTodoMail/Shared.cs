@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows;
+using Avalonia.Controls;
 using Microsoft.Extensions.Configuration;
 using yyLib;
 
@@ -7,8 +7,9 @@ namespace yyTodoMail
 {
     public static class Shared
     {
-        public static void ShowExceptionMessageBox (Window? owner, Exception exception) =>
-            MessageBox.Show (owner, exception.ToString (), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        // todo
+        // public static void ShowExceptionMessageBox (Window? owner, Exception exception) =>
+            // MessageBox.Show (owner, exception.ToString (), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 
         // GetSection never returns null.
 
