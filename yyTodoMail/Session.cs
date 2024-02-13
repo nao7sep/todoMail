@@ -172,6 +172,10 @@ namespace yyTodoMail
 
         public static yyMailConnectionInfoModel? MailConnectionInfo => _mailConnectionInfo.Value;
 
-        public static void Cleanup () => Conversation.Dispose (); // May be unnecessary, but harmless.
+        public static void Cleanup () // May be unnecessary, but harmless.
+        {
+            if (_conversation.IsValueCreated)
+                _conversation.Value.Dispose ();
+        }
     }
 }

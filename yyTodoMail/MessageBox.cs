@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
+using yyLib;
 
 namespace yyTodoMail
 {
@@ -10,7 +12,10 @@ namespace yyTodoMail
         public static MessageBoxResult Show (Window? owner, string messageBoxText, string? caption = null, MessageBoxButton button = MessageBoxButton.OK, MessageBoxResult defaultResult = MessageBoxResult.None)
         {
             // todo
+            yySimpleLogger.Default.TryWriteMessage ("MessageBox.Show: " + messageBoxText);
             return MessageBoxResult.None;
         }
+
+        public static MessageBoxResult ShowException (Window? owner, Exception exception) => Show (owner, exception.ToString ().TrimEnd (), "Exception");
     }
 }
