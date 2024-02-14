@@ -21,25 +21,25 @@
         <Grid RowDefinitions="Auto,Auto,*,Auto">
             <DockPanel Margin="3">
                 <Label Content="From:" />
-                <TextBox Name="SenderTextBox" Classes="readOnly" />
+                <TextBox Name="SenderTextBox" Text="{Binding Sender}" Classes="readOnly" />
             </DockPanel>
 
-            <TextBox Grid.Row="1" Name="SubjectTextBox" Watermark="Subject" Margin="3" />
-            <TextBox Grid.Row="2" Name="BodyTextBox" Watermark="Body" Margin="3" Classes="multiline" />
-            <Button Grid.Row="3" Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="3" />
-            <Button Grid.Row="3" Name="TranslateButton" Content="Translate" HorizontalAlignment="Right" Margin="3" />
+            <TextBox Grid.Row="1" Name="SubjectTextBox" Watermark="Subject" Text="{Binding Subject}" Margin="3" />
+            <TextBox Grid.Row="2" Name="BodyTextBox" Watermark="Body" Text="{Binding Body}" Margin="3" Classes="multiline" />
+            <Button Grid.Row="3" Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="3" IsEnabled="{Binding HasSubjectOrBody}" Command="{Binding SendCommand}" />
+            <Button Grid.Row="3" Name="TranslateButton" Content="Translate" HorizontalAlignment="Right" Margin="3" IsEnabled="{Binding HasSubjectOrBody}" Command="{Binding TranslateCommand}" />
         </Grid>
 
         <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*,Auto">
             <DockPanel Margin="3">
                 <Label Content="To:" />
-                <TextBox Name="RecipientTextBox" Classes="readOnly" />
+                <TextBox Name="RecipientTextBox" Text="{Binding Recipient}" Classes="readOnly" />
             </DockPanel>
 
-            <TextBox Grid.Row="1" Name="TranslatedSubjectTextBox" Margin="3" Classes="readOnly" />
-            <TextBox Grid.Row="2" Name="TranslatedBodyTextBox" Margin="3" Classes="multiline readOnly" />
-            <Button Grid.Row="3" Name="SendTranslatedButton" Content="Send Translated" HorizontalAlignment="Left" Margin="3" />
-            <Button Grid.Row="3" Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="3" />
+            <TextBox Grid.Row="1" Name="TranslatedSubjectTextBox" Text="{Binding TranslatedSubject}" Margin="3" Classes="readOnly" />
+            <TextBox Grid.Row="2" Name="TranslatedBodyTextBox" Text="{Binding TranslatedBody}" Margin="3" Classes="multiline readOnly" />
+            <Button Grid.Row="3" Name="SendTranslatedButton" Content="Send Translated" HorizontalAlignment="Left" Margin="3" IsEnabled="{Binding HasTranslation}" Command="{Binding SendTranslatedCommand}" />
+            <Button Grid.Row="3" Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="3" Click="CloseButtonClicked" />
         </Grid>
     </Grid>
 </Window>
