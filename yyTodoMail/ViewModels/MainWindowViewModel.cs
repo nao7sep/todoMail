@@ -105,14 +105,17 @@ public class MainWindowViewModel: ViewModelBase
     {
         SendCommand = ReactiveCommand.Create (() =>
         {
+            // todo
         });
 
         TranslateCommand = ReactiveCommand.Create (() =>
         {
+            // todo
         });
 
         SendTranslatedCommand = ReactiveCommand.Create (() =>
         {
+            // todo
         });
     }
 }

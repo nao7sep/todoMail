@@ -12,26 +12,9 @@ public partial class MessageBoxWindow: Window
     {
         InitializeComponent ();
 
-        Opened += (sender, e) =>
-        {
-            try
-            {
-                if (DataContext is MessageBoxWindowViewModel xViewModel)
-                {
-                    // I dont want to close message boxes by pressing the enter key accidentally,
-                    //     but when I'm closing a window, I sometimes want to do so only by the keyboard.
-
-                    if (xViewModel.IsSecondButtonVisible)
-                        SecondButton.Focus ();
-                }
-            }
-
-            catch (Exception xException)
-            {
-                yySimpleLogger.Default.TryWriteException (xException);
-                MessageBox.ShowException (null, xException);
-            }
-        };
+        // I once wrote code to set the focus to the second button if it's visible, and it did work,
+        //     but there wasnt much point as arrow keys didnt work to navigate between the buttons like in WPF.
+        // Opened += (sender, e) =>
     }
 
     private void FirstButtonClicked (object? sender, RoutedEventArgs e)
