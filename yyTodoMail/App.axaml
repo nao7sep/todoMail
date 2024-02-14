@@ -11,5 +11,38 @@
 
     <Application.Styles>
         <FluentTheme />
+
+        <Style Selector="Label">
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style Selector="TextBox.multiline">
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="AcceptsTab" Value="False" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        </Style>
+
+        <Style Selector="TextBox.readOnly">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
     </Application.Styles>
 </Application>

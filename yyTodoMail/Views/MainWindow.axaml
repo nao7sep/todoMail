@@ -3,16 +3,43 @@
     xmlns:vm="using:yyTodoMail.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="512"
     x:Class="yyTodoMail.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
-    Title="yyTodoMail">
+    Title="yyTodoMail" FontSize="300">
+    <!-- FontSize@Window wasnt applied to those of TextBoxes for some reason.
+         This is one way to make sure all the font sizes are as expected. -->
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
-            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
+    <Grid Margin="9" ColumnDefinitions="*,*">
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+            <DockPanel Margin="3">
+                <Label Content="From:" />
+                <TextBox Name="SenderTextBox" Classes="readOnly" />
+            </DockPanel>
+
+            <TextBox Grid.Row="1" Name="SubjectTextBox" Watermark="Subject" Margin="3" />
+            <TextBox Grid.Row="2" Name="BodyTextBox" Watermark="Body" Margin="3" Classes="multiline" />
+            <Button Grid.Row="3" Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="3" />
+            <Button Grid.Row="3" Name="TranslateButton" Content="Translate" HorizontalAlignment="Right" Margin="3" />
+        </Grid>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*,Auto">
+            <DockPanel Margin="3">
+                <Label Content="To:" />
+                <TextBox Name="RecipientTextBox" Classes="readOnly" />
+            </DockPanel>
+
+            <TextBox Grid.Row="1" Name="TranslatedSubjectTextBox" Margin="3" Classes="readOnly" />
+            <TextBox Grid.Row="2" Name="TranslatedBodyTextBox" Margin="3" Classes="multiline readOnly" />
+            <Button Grid.Row="3" Name="SendTranslatedButton" Content="Send Translated" HorizontalAlignment="Left" Margin="3" />
+            <Button Grid.Row="3" Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="3" />
+        </Grid>
+    </Grid>
 </Window>
