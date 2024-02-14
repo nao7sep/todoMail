@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
-using yyLib;
+using yyTodoMail.ViewModels;
+using yyTodoMail.Views;
 
 namespace yyTodoMail
 {
@@ -9,13 +10,32 @@ namespace yyTodoMail
         // It's not considered a good practice to show an owner-less message box especially in the code-behind of the app class,
         //     but this is a small project and I have more important things to work on (meaning I'm just lazy).
 
-        public static MessageBoxResult Show (Window? owner, string messageBoxText, string? caption = null, MessageBoxButton button = MessageBoxButton.OK, MessageBoxResult defaultResult = MessageBoxResult.None)
+        public static void Show (Window? owner, string caption, string message, bool isSecondButtonVisible)
         {
-            // todo
-            yySimpleLogger.Default.TryWriteMessage ("MessageBox.Show: " + messageBoxText);
-            return MessageBoxResult.None;
+            MessageBoxWindow xWindow = new ()
+            {
+                DataContext = new MessageBoxWindowViewModel
+                {
+                    Caption = caption,
+                    Message = message,
+                    IsSecondButtonVisible = isSecondButtonVisible
+                }
+            };
+
+            if (owner != null)
+            {
+                xWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                xWindow.ShowDialog (owner); // Returns a task that completes when the window is closed.
+                // For more information, refer to the Closing event's implementation in MainWindow.axaml.cs.
+            }
+
+            else
+            {
+                xWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                xWindow.Show ();
+            }
         }
 
-        public static MessageBoxResult ShowException (Window? owner, Exception exception) => Show (owner, exception.ToString ().TrimEnd (), "Exception");
+        public static void ShowException (Window? owner, Exception exception) => Show (owner, "Exception", exception.ToString ().TrimEnd (), isSecondButtonVisible: false);
     }
 }

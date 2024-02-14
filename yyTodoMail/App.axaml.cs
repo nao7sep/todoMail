@@ -38,9 +38,9 @@ public partial class App: Application
 
                     if (xSender == null || xRecipient == null || xGptChatConnectionInfo == null || xMailConnectionInfo == null)
                     {
-                        MessageBox.Show (null, "Please check the JSON configuration files located in the same directory as this application.", "Configuration Error");
-                        desktop.Shutdown (1); // Not exactly an error, but the app hasnt done much.
-                        desktop.MainWindow = null; // Prevents the window from appearing.
+                        MessageBox.Show (null, "Configuration Error", "Please check the JSON configuration files located in the same directory as this application.", isSecondButtonVisible: false);
+                        // desktop.Shutdown (1); // We need the UI thread to be running to show the message box.
+                        desktop.MainWindow = null; // Prevents the main window from appearing.
                     }
                 }
 

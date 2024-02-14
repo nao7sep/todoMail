@@ -52,7 +52,7 @@ public partial class MainWindow: Window
             }
         };
 
-        Closing += (sender, e) =>
+        async void OnClosing (object? sender, WindowClosingEventArgs e)
         {
             try
             {
@@ -60,9 +60,31 @@ public partial class MainWindow: Window
                 {
                     if (xViewModel.HasSubjectOrBody || xViewModel.HasTranslation)
                     {
-                        if (MessageBox.Show (this, "Are you sure you want to close the window?", "Confirmation",
-                                MessageBoxButton.OKCancel, MessageBoxResult.Cancel) == MessageBoxResult.Cancel)
-                            e.Cancel = true;
+                        // When ShowDialog is called, it gets back to the caller immediately.
+                        // We need to keep the window open so that we can wait for the task associated with the dialog to complete,
+                        //     only after which we can get the actual result of the dialog.
+                        // Theoretically, the app goes back to its normal state for a few milliseconds or so, waiting for new events to occur,
+                        //     before the task completes, the result is examined and the window is closed if necessary.
+
+                        e.Cancel = true;
+
+                        MessageBoxWindow xWindow = new ()
+                        {
+                            DataContext = new MessageBoxWindowViewModel
+                            {
+                                Caption = "Confirmation",
+                                Message = "Are you sure you want to close the window?",
+                                IsSecondButtonVisible = true
+                            },
+
+                            WindowStartupLocation = WindowStartupLocation.CenterOwner
+                        };
+
+                        if (await xWindow.ShowDialog <int> (this) == 1)
+                        {
+                            Closing -= OnClosing;
+                            Close ();
+                        }
                     }
                 }
             }
@@ -72,7 +94,9 @@ public partial class MainWindow: Window
                 yySimpleLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (this, xException);
             }
-        };
+        }
+
+        Closing += OnClosing;
     }
 
     private void CloseButtonClicked (object? sender, RoutedEventArgs e)
