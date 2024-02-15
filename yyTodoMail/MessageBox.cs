@@ -20,6 +20,13 @@ namespace yyTodoMail
 
             if (Dispatcher.UIThread.CheckAccess ())
             {
+                // Originally, the code to generate the window and the data context was before the call to CheckAccess.
+                // Then, I got an exception with the message "Call from invalid thread" when I Task.Run-ed some code, in which a message box was shown.
+                // Generation of a window highly likely interacts with UI-related things as it requires to refer to styles, resources, etc.
+                // View models, on the other hand, MAY be safer to generate in a non-UI thread,
+                //     but we dont need to take the risk considering view models in Avalonia UI inherit from ReactiveObject, whose implementation may be changed in the future.
+                // https://github.com/reactiveui/ReactiveUI/blob/main/src/ReactiveUI/ReactiveObject/ReactiveObject.cs
+
                 MessageBoxWindow xWindow = new ()
                 {
                     DataContext = new MessageBoxWindowViewModel
