@@ -103,17 +103,17 @@ public class MainWindowViewModel: ViewModelBase
 
     public MainWindowViewModel ()
     {
-        SendCommand = ReactiveCommand.Create (() =>
+        SendCommand = ReactiveCommand.CreateFromTask (async () =>
         {
             // todo
         });
 
-        TranslateCommand = ReactiveCommand.Create (() =>
+        TranslateCommand = ReactiveCommand.CreateFromTask (async () =>
         {
             // todo
         });
 
-        SendTranslatedCommand = ReactiveCommand.Create (() =>
+        SendTranslatedCommand = ReactiveCommand.CreateFromTask (async () =>
         {
             // todo
         });

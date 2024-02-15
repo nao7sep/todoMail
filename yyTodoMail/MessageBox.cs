@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using yyTodoMail.ViewModels;
 using yyTodoMail.Views;
 
@@ -12,27 +13,65 @@ namespace yyTodoMail
 
         public static void Show (Window? owner, string caption, string message, bool isSecondButtonVisible)
         {
-            MessageBoxWindow xWindow = new ()
-            {
-                DataContext = new MessageBoxWindowViewModel
-                {
-                    Caption = caption,
-                    Message = message,
-                    IsSecondButtonVisible = isSecondButtonVisible
-                }
-            };
+            // Checks if the code is running in the UI thread.
+            // If it is and we dont need a result, we can fire and forget the window; the parent window will anyway be inoperative.
+            // If we need a result, we can use "await" in an asynchronous command or event handler and use the result when it comes out.
+            // If it's running in a thread other than the UI thread, the following code should work.
 
-            if (owner != null)
+            if (Dispatcher.UIThread.CheckAccess ())
             {
-                xWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                xWindow.ShowDialog (owner); // Returns a task that completes when the window is closed.
-                // For more information, refer to the Closing event's implementation in MainWindow.axaml.cs.
+                MessageBoxWindow xWindow = new ()
+                {
+                    DataContext = new MessageBoxWindowViewModel
+                    {
+                        Caption = caption,
+                        Message = message,
+                        IsSecondButtonVisible = isSecondButtonVisible
+                    }
+                };
+
+                if (owner != null)
+                {
+                    xWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    xWindow.ShowDialog (owner); // Returns a task that completes when the window is closed.
+                    // For more information, refer to the Closing event's implementation in MainWindow.axaml.cs.
+                    // Added comment: If an exception is thrown within the task, its info will be stored silently in the task.
+                    // For something more complex than this simple yes/no dialog, we should worry about exceptions.
+                }
+
+                else
+                {
+                    xWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    xWindow.Show ();
+                }
             }
 
             else
             {
-                xWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                xWindow.Show ();
+                Dispatcher.UIThread.InvokeAsync (() =>
+                {
+                    MessageBoxWindow xWindow = new ()
+                    {
+                        DataContext = new MessageBoxWindowViewModel
+                        {
+                            Caption = caption,
+                            Message = message,
+                            IsSecondButtonVisible = isSecondButtonVisible
+                        }
+                    };
+
+                    if (owner != null)
+                    {
+                        xWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        xWindow.ShowDialog (owner);
+                    }
+
+                    else
+                    {
+                        xWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                        xWindow.Show ();
+                    }
+                });
             }
         }
 

@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using yyLib;
-using yyTodoMail.ViewModels;
 
 namespace yyTodoMail.Views;
 
@@ -10,8 +9,9 @@ public partial class MessageBoxWindow: Window
 {
     public MessageBoxWindow ()
     {
+#pragma warning disable IDE0021 // Use expression body for constructors
         InitializeComponent ();
-
+#pragma warning restore IDE0021
         // I once wrote code to set the focus to the second button if it's visible, and it did work,
         //     but there wasnt much point as arrow keys didnt work to navigate between the buttons like in WPF.
         // Opened += (sender, e) =>

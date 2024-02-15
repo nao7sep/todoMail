@@ -14,5 +14,20 @@ namespace yyTodoMail
         private static readonly Lazy <IConfigurationSection> _appSpecificConfig = new (() => yyAppSettings.Config.GetSection ("AppSpecific"));
 
         public static IConfigurationSection AppSpecificConfig => _appSpecificConfig.Value;
+
+        private static readonly Lazy <string> _themeVariant = new (() =>
+        {
+            string? xThemeVariant = AppSpecificConfig ["ThemeVariant"];
+
+            if (string.Equals (xThemeVariant, "Light", StringComparison.OrdinalIgnoreCase))
+                return "Light";
+
+            if (string.Equals (xThemeVariant, "Dark", StringComparison.OrdinalIgnoreCase))
+                return "Dark";
+
+            return "Default";
+        });
+
+        public static string ThemeVariant => _themeVariant.Value;
     }
 }

@@ -80,7 +80,11 @@ public partial class MainWindow: Window
                             WindowStartupLocation = WindowStartupLocation.CenterOwner
                         };
 
-                        if (await xWindow.ShowDialog <int> (this) == 1)
+                        if (await xWindow.ShowDialog <int> (this) == 1) // Executed in the UI thread.
+                        // Here, we need the final result that comes out only after the window is closed and so we need "await".
+                        // In other parts of the app where we fire and forget a dialog only with the OK button, we should be able to:
+                        //     1) Just call ShowDialog and have the owner window be inoperative until the associated child window is closed, or,
+                        //     2) When there's no other window, call ShowDialog, making sure it runs in the UI thread, for the app to close when the window is closed.
                         {
                             Closing -= OnClosing;
                             Close ();
