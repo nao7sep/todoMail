@@ -7,7 +7,7 @@
     x:Class="yyTodoMail.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
-    Title="yyTodoMail" FontSize="300">
+    Title="yyTodoMail" FontSize="300" IsEnabled="{Binding IsWindowEnabled}">
     <!-- FontSize@Window wasnt applied to those of TextBoxes for some reason.
          This is one way to make sure all the font sizes are as expected. -->
 

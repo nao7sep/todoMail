@@ -128,7 +128,7 @@ namespace yyTodoMail
 
         public static yyGptChatConnectionInfoModel? GptChatConnectionInfo => _gptChatConnectionInfo.Value;
 
-        private static readonly Lazy <yyGptChatConversation> _conversation = new (() =>
+        private static readonly Lazy <yyGptChatConversation> _conversationForSubject = new (() =>
         {
             yyGptChatConversation xConversation = new (GptChatConnectionInfo!);
 
@@ -142,7 +142,23 @@ namespace yyTodoMail
             return xConversation;
         });
 
-        public static yyGptChatConversation Conversation => _conversation.Value;
+        public static yyGptChatConversation ConversationForSubject => _conversationForSubject.Value;
+
+        // Lazy coding.
+        // The app will use 2 threads to translate the subject and body at the same time.
+
+        private static readonly Lazy <yyGptChatConversation> _conversationForBody = new (() =>
+        {
+            yyGptChatConversation xConversation = new (GptChatConnectionInfo!);
+
+            xConversation.Request.Model = Shared.AppSpecificConfig ["OpenAiChatModel"].WhiteSpaceToNull () ?? yyGptChat.DefaultModel;
+
+            xConversation.Request.AddMessage (yyGptChatMessageRole.System, "You are a helpful assistant.");
+
+            return xConversation;
+        });
+
+        public static yyGptChatConversation ConversationForBody => _conversationForBody.Value;
 
         // -----------------------------------------------------------------------------
 
@@ -174,8 +190,11 @@ namespace yyTodoMail
 
         public static void Cleanup () // May be unnecessary, but harmless.
         {
-            if (_conversation.IsValueCreated)
-                _conversation.Value.Dispose ();
+            if (_conversationForSubject.IsValueCreated)
+                _conversationForSubject.Value.Dispose ();
+
+            if (_conversationForBody.IsValueCreated)
+                _conversationForBody.Value.Dispose ();
         }
     }
 }
