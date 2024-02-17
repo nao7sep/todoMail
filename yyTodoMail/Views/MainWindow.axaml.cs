@@ -72,7 +72,9 @@ public partial class MainWindow: Window
                         {
                             DataContext = new MessageBoxWindowViewModel
                             {
-                                Caption = "Confirmation",
+                                // If the user and/or the app has to take some action, the caption should be the action (like "Confirm").
+                                // If the window is intended to just share some info, the type of the info (like "Error") MAY be the caption.
+                                Caption = "Confirm",
                                 Message = "Are you sure you want to close the window?",
                                 IsSecondButtonVisible = true
                             },
