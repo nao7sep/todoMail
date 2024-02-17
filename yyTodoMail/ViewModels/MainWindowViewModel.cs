@@ -109,15 +109,15 @@ public class MainWindowViewModel: ViewModelBase
 
     // -----------------------------------------------------------------------------
 
-    public ReactiveCommand <Unit, Unit> SendCommand { get; }
+    public ReactiveCommand <Unit, bool> SendCommand { get; }
 
-    public ReactiveCommand <Unit, Unit> TranslateCommand { get; }
+    public ReactiveCommand <Unit, bool> TranslateCommand { get; }
 
-    public ReactiveCommand <Unit, Unit> SendTranslatedCommand { get; }
+    public ReactiveCommand <Unit, bool> SendTranslatedCommand { get; }
 
     public MainWindowViewModel ()
     {
-        SendCommand = ReactiveCommand.CreateFromTask (async () =>
+        SendCommand = ReactiveCommand.CreateFromTask <Unit, bool> (async _ =>
         {
             try
             {
@@ -138,7 +138,7 @@ public class MainWindowViewModel: ViewModelBase
                     TranslatedSubject = null;
                     TranslatedBody = null;
 
-                    // todo: Set focus to Body.
+                    return true;
                 }
             }
 
@@ -152,9 +152,11 @@ public class MainWindowViewModel: ViewModelBase
             {
                 IsWindowEnabled = true;
             }
+
+            return false;
         });
 
-        TranslateCommand = ReactiveCommand.CreateFromTask (async () =>
+        TranslateCommand = ReactiveCommand.CreateFromTask <Unit, bool> (async _ =>
         {
             try
             {
@@ -246,10 +248,7 @@ public class MainWindowViewModel: ViewModelBase
                 await Task.WhenAll (xTasks);
 
                 if (xTasks.All (x => x.Result))
-                {
-                    // We often need to modify the body and re-translate it.
-                    // todo: Set focus to Body.
-                }
+                    return true;
             }
 
             catch (Exception xException)
@@ -262,9 +261,11 @@ public class MainWindowViewModel: ViewModelBase
             {
                 IsWindowEnabled = true;
             }
+
+            return false;
         });
 
-        SendTranslatedCommand = ReactiveCommand.CreateFromTask (async () =>
+        SendTranslatedCommand = ReactiveCommand.CreateFromTask <Unit, bool> (async _ =>
         {
             try
             {
@@ -285,7 +286,7 @@ public class MainWindowViewModel: ViewModelBase
                     TranslatedSubject = null;
                     TranslatedBody = null;
 
-                    // todo: Set focus to Body.
+                    return true;
                 }
             }
 
@@ -299,6 +300,8 @@ public class MainWindowViewModel: ViewModelBase
             {
                 IsWindowEnabled = true;
             }
+
+            return false;
         });
     }
 }

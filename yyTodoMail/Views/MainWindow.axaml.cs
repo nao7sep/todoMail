@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using yyLib;
 using yyTodoMail.ViewModels;
 
@@ -12,10 +14,35 @@ public partial class MainWindow: Window
     {
         InitializeComponent ();
 
+        // Adjusting the UI could be done in Initialized in WPF.
+        // In Avalonia UI, I failed to maximize the main window in Initialized.
+        // I'm concluding UI adjustment that can happen in front of the user can and should be done in Opened in Avalonia UI for its multi-platform nature.
+
         Opened += (sender, e) =>
         {
             try
             {
+                // Command-related settings must be done before UI-related things as the property setters may already need to trigger the commands.
+
+                if (DataContext is MainWindowViewModel xViewModel)
+                {
+                    void SetFocusToBodyTextBox () => Dispatcher.UIThread.InvokeAsync (() => BodyTextBox.Focus ());
+
+                    xViewModel.SendCommand.
+                        Where (x => x).
+                        Subscribe (_ => SetFocusToBodyTextBox ());
+
+                    xViewModel.TranslateCommand.
+                        Where (x => x).
+                        Subscribe (_ => SetFocusToBodyTextBox ());
+
+                    xViewModel.SendTranslatedCommand.
+                        Where (x => x).
+                        Subscribe (_ => SetFocusToBodyTextBox ());
+                }
+
+                // -----------------------------------------------------------------------------
+
                 string? xTitle = Shared.AppSpecificConfig ["Title"];
 
                 if (string.IsNullOrWhiteSpace (xTitle) == false)

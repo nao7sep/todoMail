@@ -55,7 +55,7 @@ namespace yyTodoMail
                 {
                     Name = "NAME",
                     Address = "ADDRESS",
-                    PreferredLanguages = new [] { "English" }
+                    PreferredLanguages = ["English"]
                 };
 
                 File.WriteAllText (xRecipientInfoFilePath, JsonSerializer.Serialize (xRecipient, yyJson.DefaultSerializationOptions), Encoding.UTF8);
