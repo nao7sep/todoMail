@@ -198,9 +198,9 @@ public class MainWindowViewModel: ViewModelBase
                                     yySimpleLogger.Default.TryWrite ("Translation RawContent", xResult.RawContent.GetVisibleString ()); // Just in case.
 
                                 if (xResult.PartialMessage != null)
-                                    throw new yyApplicationException ($"Translation Error: {xResult.PartialMessage.GetVisibleString ()}");
+                                    throw new yyGeneralException ($"Translation Error: {xResult.PartialMessage.GetVisibleString ()}");
 
-                                else throw new yyApplicationException ($"Translation Exception: {xResult.Exception}"); // Not exactly an user friendly message, though.
+                                else throw new yyGeneralException ($"Translation Exception: {xResult.Exception}"); // Not exactly an user friendly message, though.
                             }
                         }
 

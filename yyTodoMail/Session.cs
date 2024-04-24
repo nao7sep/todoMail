@@ -10,13 +10,13 @@ namespace yyTodoMail
 {
     public static class Session
     {
-        private static readonly Lazy <yyMailContactModel?> _sender = new (() =>
+        private static readonly Lazy <yyMailContact?> _sender = new (() =>
         {
             string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
 
             if (File.Exists (xSenderInfoFilePath) == false)
             {
-                var xSender = new yyMailContactModel
+                var xSender = new yyMailContact
                 {
                     Name = "NAME",
                     Address = "ADDRESS"
@@ -27,10 +27,10 @@ namespace yyTodoMail
                 return null;
             }
 
-            return JsonSerializer.Deserialize <yyMailContactModel> (File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
+            return JsonSerializer.Deserialize <yyMailContact> (File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
         });
 
-        public static yyMailContactModel? Sender => _sender.Value;
+        public static yyMailContact? Sender => _sender.Value;
 
         private static readonly Lazy <string?> _senderString = new (() =>
         {
@@ -45,13 +45,13 @@ namespace yyTodoMail
 
         public static string? SenderString => _senderString.Value;
 
-        private static readonly Lazy <yyMailContactModel?> _recipient = new (() =>
+        private static readonly Lazy <yyMailContact?> _recipient = new (() =>
         {
             string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
 
             if (File.Exists (xRecipientInfoFilePath) == false)
             {
-                var xRecipient = new yyMailContactModel
+                var xRecipient = new yyMailContact
                 {
                     Name = "NAME",
                     Address = "ADDRESS",
@@ -63,10 +63,10 @@ namespace yyTodoMail
                 return null;
             }
 
-            return JsonSerializer.Deserialize <yyMailContactModel> (File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
+            return JsonSerializer.Deserialize <yyMailContact> (File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
         });
 
-        public static yyMailContactModel? Recipient => _recipient.Value;
+        public static yyMailContact? Recipient => _recipient.Value;
 
         private static readonly Lazy <string?> _recipientString = new (() =>
         {
@@ -164,13 +164,13 @@ namespace yyTodoMail
 
         // Things related to mail sending:
 
-        private static readonly Lazy <yyMailConnectionInfoModel?> _mailConnectionInfo = new (() =>
+        private static readonly Lazy <yyMailConnectionInfo?> _mailConnectionInfo = new (() =>
         {
             string xMailConnectionInfoFilePath = yyApplicationDirectory.MapPath ("MailConnection.json");
 
             if (File.Exists (xMailConnectionInfoFilePath) == false)
             {
-                var xMailConnectionInfo = new yyMailConnectionInfoModel
+                var xMailConnectionInfo = new yyMailConnectionInfo
                 {
                     Host = "HOST",
                     Port = 587,
@@ -183,10 +183,10 @@ namespace yyTodoMail
                 return null;
             }
 
-            return JsonSerializer.Deserialize <yyMailConnectionInfoModel> (File.ReadAllText (xMailConnectionInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
+            return JsonSerializer.Deserialize <yyMailConnectionInfo> (File.ReadAllText (xMailConnectionInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
         });
 
-        public static yyMailConnectionInfoModel? MailConnectionInfo => _mailConnectionInfo.Value;
+        public static yyMailConnectionInfo? MailConnectionInfo => _mailConnectionInfo.Value;
 
         public static void Cleanup () // May be unnecessary, but harmless.
         {
