@@ -100,7 +100,10 @@ namespace yyTodoMail
                     ApiKey = "API_KEY",
 
                     // Rather than a dummy value, the value in the .yyUserSecrets.json file (IF it's available) or the embedded-in-code default value is initially output.
-                    // The user may: 1) Replace the one in GptChatConnection.json, or 2) Remove the key to use whatever yyGptChat.DefaultEndpoint may return.
+                    // The user may: 1) Replace the one in GptChatConnection.json, or 2) Remove the key to use whatever yyGptChat.Default* may return.
+
+                    Organization = yyGpt.DefaultOrganization,
+                    Project = yyGpt.DefaultProject,
                     Endpoint = yyGptChat.DefaultEndpoint
 
                     // The code above is merely initialization of the JSON file.
@@ -118,6 +121,12 @@ namespace yyTodoMail
             {
                 if (string.IsNullOrWhiteSpace (xConnectionInfo.ApiKey))
                     xConnectionInfo.ApiKey = yyGpt.DefaultApiKey;
+
+                if (string.IsNullOrWhiteSpace (xConnectionInfo.Organization))
+                    xConnectionInfo.Organization = yyGpt.DefaultOrganization;
+
+                if (string.IsNullOrWhiteSpace (xConnectionInfo.Project))
+                    xConnectionInfo.Project = yyGpt.DefaultProject;
 
                 if (string.IsNullOrWhiteSpace (xConnectionInfo.Endpoint))
                     xConnectionInfo.Endpoint = yyGptChat.DefaultEndpoint;
