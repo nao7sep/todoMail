@@ -85,13 +85,13 @@ namespace yyTodoMail
 
         // Things related to translation:
 
-        private static readonly Lazy <yyGptChatConnectionInfoModel?> _gptChatConnectionInfo = new (() =>
+        private static readonly Lazy <yyGptChatConnectionInfo?> _gptChatConnectionInfo = new (() =>
         {
             string xGptChatConnectionInfoFilePath = yyApplicationDirectory.MapPath ("GptChatConnection.json");
 
             if (File.Exists (xGptChatConnectionInfoFilePath) == false)
             {
-                var xGptChatConnectionInfo = new yyGptChatConnectionInfoModel
+                var xGptChatConnectionInfo = new yyGptChatConnectionInfo
                 {
                     // We cant provide a default API key.
                     // A dummy value is initially contained in the newly generated JSON file.
@@ -104,7 +104,8 @@ namespace yyTodoMail
 
                     Organization = yyGpt.DefaultOrganization,
                     Project = yyGpt.DefaultProject,
-                    Endpoint = yyGptChat.DefaultEndpoint
+                    Endpoint = yyGptChat.DefaultEndpoint,
+                    Timeout = yyGpt.DefaultTimeout
 
                     // The code above is merely initialization of the JSON file.
                     // The loading and usage of alternative values are done about 10 lines later.
@@ -115,7 +116,7 @@ namespace yyTodoMail
                 return null;
             }
 
-            var xConnectionInfo = JsonSerializer.Deserialize <yyGptChatConnectionInfoModel> (File.ReadAllText (xGptChatConnectionInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
+            var xConnectionInfo = JsonSerializer.Deserialize <yyGptChatConnectionInfo> (File.ReadAllText (xGptChatConnectionInfoFilePath, Encoding.UTF8), yyJson.DefaultDeserializationOptions);
 
             if (xConnectionInfo != null)
             {
@@ -130,12 +131,15 @@ namespace yyTodoMail
 
                 if (string.IsNullOrWhiteSpace (xConnectionInfo.Endpoint))
                     xConnectionInfo.Endpoint = yyGptChat.DefaultEndpoint;
+
+                if (xConnectionInfo.Timeout == null)
+                    xConnectionInfo.Timeout = yyGpt.DefaultTimeout;
             }
 
             return xConnectionInfo;
         });
 
-        public static yyGptChatConnectionInfoModel? GptChatConnectionInfo => _gptChatConnectionInfo.Value;
+        public static yyGptChatConnectionInfo? GptChatConnectionInfo => _gptChatConnectionInfo.Value;
 
         private static readonly Lazy <yyGptChatConversation> _conversationForSubject = new (() =>
         {
