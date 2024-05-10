@@ -12,7 +12,7 @@ namespace yyTodoMail
     {
         private static readonly Lazy <yyMailContact?> _sender = new (() =>
         {
-            string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
+            string xSenderInfoFilePath = yyAppDirectory.MapPath ("Sender.json");
 
             if (File.Exists (xSenderInfoFilePath) == false)
             {
@@ -47,7 +47,7 @@ namespace yyTodoMail
 
         private static readonly Lazy <yyMailContact?> _recipient = new (() =>
         {
-            string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
+            string xRecipientInfoFilePath = yyAppDirectory.MapPath ("Recipient.json");
 
             if (File.Exists (xRecipientInfoFilePath) == false)
             {
@@ -87,7 +87,7 @@ namespace yyTodoMail
 
         private static readonly Lazy <yyGptChatConnectionInfo?> _gptChatConnectionInfo = new (() =>
         {
-            string xGptChatConnectionInfoFilePath = yyApplicationDirectory.MapPath ("GptChatConnection.json");
+            string xGptChatConnectionInfoFilePath = yyAppDirectory.MapPath ("GptChatConnection.json");
 
             if (File.Exists (xGptChatConnectionInfoFilePath) == false)
             {
@@ -179,7 +179,7 @@ namespace yyTodoMail
 
         private static readonly Lazy <yyMailConnectionInfo?> _mailConnectionInfo = new (() =>
         {
-            string xMailConnectionInfoFilePath = yyApplicationDirectory.MapPath ("MailConnection.json");
+            string xMailConnectionInfoFilePath = yyAppDirectory.MapPath ("MailConnection.json");
 
             if (File.Exists (xMailConnectionInfoFilePath) == false)
             {
