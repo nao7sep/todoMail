@@ -8,7 +8,7 @@ namespace yyTodoMail
 {
     public static class MailStorage
     {
-        private readonly static Lazy <string> _mailStorageDirectoryPath = new (() => yyAppDirectory.MapPath ("MailStorage"));
+        private static readonly Lazy <string> _mailStorageDirectoryPath = new (() => yyAppDirectory.MapPath ("MailStorage"));
 
         public static string MailStorageDirectoryPath => _mailStorageDirectoryPath.Value;
 
