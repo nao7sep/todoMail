@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using ReactiveUI;
-using yyGptLib;
 using yyLib;
 
 namespace yyTodoMail.ViewModels;
@@ -144,7 +143,7 @@ public class MainWindowViewModel: ViewModelBase
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (null, xException);
             }
 
@@ -195,12 +194,12 @@ public class MainWindowViewModel: ViewModelBase
                             else
                             {
                                 if (xResult.RawContent != null)
-                                    yySimpleLogger.Default.TryWrite ("Translation RawContent", xResult.RawContent.GetVisibleString ()); // Just in case.
+                                    yyLogger.Default.TryWrite ("Translation RawContent", xResult.RawContent.GetVisibleString ()); // Just in case.
 
                                 if (xResult.PartialMessage != null)
-                                    throw new yyGeneralException ($"Translation Error: {xResult.PartialMessage.GetVisibleString ()}");
+                                    throw new yyException ($"Translation Error: {xResult.PartialMessage.GetVisibleString ()}");
 
-                                else throw new yyGeneralException ($"Translation Exception: {xResult.Exception}"); // Not exactly an user friendly message, though.
+                                else throw new yyException ($"Translation Exception: {xResult.Exception}"); // Not exactly an user friendly message, though.
                             }
                         }
 
@@ -209,7 +208,7 @@ public class MainWindowViewModel: ViewModelBase
 
                     catch (Exception xException)
                     {
-                        yySimpleLogger.Default.TryWriteException (xException);
+                        yyLogger.Default.TryWriteException (xException);
                         MessageBox.ShowException (null, xException);
                         return false;
                     }
@@ -253,7 +252,7 @@ public class MainWindowViewModel: ViewModelBase
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (null, xException);
             }
 
@@ -292,7 +291,7 @@ public class MainWindowViewModel: ViewModelBase
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (null, xException);
             }
 

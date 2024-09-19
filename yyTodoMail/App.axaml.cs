@@ -43,7 +43,7 @@ public partial class App: Application
 
                 catch (Exception xException)
                 {
-                    yySimpleLogger.Default.TryWriteException (xException);
+                    yyLogger.Default.TryWriteException (xException);
                     MessageBox.ShowException (null, xException);
                 }
             };
@@ -57,7 +57,7 @@ public partial class App: Application
 
                 catch (Exception xException)
                 {
-                    yySimpleLogger.Default.TryWriteException (xException);
+                    yyLogger.Default.TryWriteException (xException);
                     MessageBox.ShowException (null, xException);
                 }
             };

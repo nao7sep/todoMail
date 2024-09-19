@@ -4,7 +4,6 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using yyLib;
-using yyMailLib;
 
 namespace yyTodoMail
 {
@@ -37,9 +36,9 @@ namespace yyTodoMail
         public static (string Subject, string Body) GetSubjectAndBody (string? subject, string? body, string? translatedSubject, string? translatedBody)
         {
             string xSubject = (subject ?? string.Empty).Trim (),
-                xBody = yyString.TrimLines (body ?? string.Empty)!,
+                xBody = yyString.TrimRedundantLines (body ?? string.Empty)!,
                 xTranslatedSubject = (translatedSubject ?? string.Empty).Trim (),
-                xTranslatedBody = yyString.TrimLines (translatedBody ?? string.Empty)!;
+                xTranslatedBody = yyString.TrimRedundantLines (translatedBody ?? string.Empty)!;
 
             bool xHasTranslation = string.IsNullOrWhiteSpace (xTranslatedSubject) == false || string.IsNullOrWhiteSpace (xTranslatedBody) == false;
 
@@ -104,7 +103,7 @@ namespace yyTodoMail
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (null, xException);
                 return false;
             }

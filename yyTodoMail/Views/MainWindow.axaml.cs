@@ -74,7 +74,7 @@ public partial class MainWindow: Window
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (this, xException);
             }
         };
@@ -124,7 +124,7 @@ public partial class MainWindow: Window
 
             catch (Exception xException)
             {
-                yySimpleLogger.Default.TryWriteException (xException);
+                yyLogger.Default.TryWriteException (xException);
                 MessageBox.ShowException (this, xException);
             }
         }
@@ -141,7 +141,7 @@ public partial class MainWindow: Window
 
         catch (Exception xException)
         {
-            yySimpleLogger.Default.TryWriteException (xException);
+            yyLogger.Default.TryWriteException (xException);
             MessageBox.ShowException (this, xException);
         }
     }

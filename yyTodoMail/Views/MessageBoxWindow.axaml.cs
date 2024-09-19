@@ -27,7 +27,7 @@ public partial class MessageBoxWindow: Window
 
         catch (Exception xException)
         {
-            yySimpleLogger.Default.TryWriteException (xException);
+            yyLogger.Default.TryWriteException (xException);
             MessageBox.ShowException (null, xException);
         }
     }
@@ -41,7 +41,7 @@ public partial class MessageBoxWindow: Window
 
         catch (Exception xException)
         {
-            yySimpleLogger.Default.TryWriteException (xException);
+            yyLogger.Default.TryWriteException (xException);
             MessageBox.ShowException (null, xException);
         }
     }
