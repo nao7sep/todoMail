@@ -1,9 +1,9 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using yyTodoMail.ViewModels;
+using todoMail.ViewModels;
 
-namespace yyTodoMail;
+namespace todoMail;
 
 public class ViewLocator: IDataTemplate
 {

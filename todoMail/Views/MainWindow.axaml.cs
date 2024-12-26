@@ -4,9 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using yyLib;
-using yyTodoMail.ViewModels;
+using todoMail.ViewModels;
 
-namespace yyTodoMail.Views;
+namespace todoMail.Views;
 
 public partial class MainWindow: Window
 {

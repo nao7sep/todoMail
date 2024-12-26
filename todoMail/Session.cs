@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using yyLib;
 
-namespace yyTodoMail
+namespace todoMail
 {
     public static class Session
     {

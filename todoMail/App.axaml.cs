@@ -3,10 +3,10 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using yyLib;
-using yyTodoMail.ViewModels;
-using yyTodoMail.Views;
+using todoMail.ViewModels;
+using todoMail.Views;
 
-namespace yyTodoMail;
+namespace todoMail;
 
 public partial class App: Application
 {

@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace yyTodoMail.ViewModels;
+namespace todoMail.ViewModels;
 
 public class MessageBoxWindowViewModel: ViewModelBase
 {

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using yyLib;
 
-namespace yyTodoMail.Views;
+namespace todoMail.Views;
 
 public partial class MessageBoxWindow: Window
 {

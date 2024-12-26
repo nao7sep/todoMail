@@ -2,7 +2,7 @@
 using Avalonia.ReactiveUI;
 using System;
 
-namespace yyTodoMail;
+namespace todoMail;
 
 sealed class Program
 {

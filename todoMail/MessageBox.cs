@@ -1,10 +1,10 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using yyTodoMail.ViewModels;
-using yyTodoMail.Views;
+using todoMail.ViewModels;
+using todoMail.Views;
 
-namespace yyTodoMail
+namespace todoMail
 {
     public static class MessageBox
     {

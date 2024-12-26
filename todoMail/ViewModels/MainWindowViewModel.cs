@@ -6,7 +6,7 @@ using Avalonia.Threading;
 using ReactiveUI;
 using yyLib;
 
-namespace yyTodoMail.ViewModels;
+namespace todoMail.ViewModels;
 
 public class MainWindowViewModel: ViewModelBase
 {

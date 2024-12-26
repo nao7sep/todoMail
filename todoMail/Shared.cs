@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using yyLib;
 
-namespace yyTodoMail
+namespace todoMail
 {
     public static class Shared
     {

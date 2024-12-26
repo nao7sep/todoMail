@@ -4,7 +4,7 @@ using System.IO;
 using MimeKit;
 using yyLib;
 
-namespace yyTodoMail
+namespace todoMail
 {
     public static class MailStorage
     {
